@@ -1,0 +1,1721 @@
+﻿```html
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0,
+      user-scalable=no">
+
+<meta name="theme-color" content="#050914">
+
+<title>GLITCH AI Assistant</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    color:#eaffff;
+    background:
+        radial-gradient(circle at 50% 35%,
+        #123c58 0%,
+        #071523 35%,
+        #02050b 80%);
+}
+
+/* =========================
+   MAIN APP
+========================= */
+
+#app{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    height:72px;
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:12px 18px;
+
+    background:rgba(2,8,17,.78);
+    border-bottom:1px solid rgba(70,220,255,.2);
+
+    backdrop-filter:blur(12px);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.logo{
+    width:43px;
+    height:43px;
+
+    display:grid;
+    place-items:center;
+
+    border:2px solid #5deaff;
+    border-radius:50%;
+
+    color:#9af6ff;
+    font-size:20px;
+    font-weight:900;
+
+    box-shadow:
+        0 0 15px rgba(65,225,255,.5),
+        inset 0 0 12px rgba(65,225,255,.2);
+}
+
+.brand h1{
+    font-size:20px;
+    letter-spacing:5px;
+}
+
+.brand small{
+    display:block;
+    margin-top:3px;
+
+    color:#6e8d9b;
+    font-size:9px;
+    letter-spacing:1px;
+}
+
+#status{
+    padding:7px 12px;
+
+    border:1px solid #275b6c;
+    border-radius:20px;
+
+    color:#72efff;
+    font-size:10px;
+    letter-spacing:1px;
+
+    background:rgba(5,25,35,.7);
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+main{
+    flex:1;
+    min-height:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    padding:14px 16px 7px;
+}
+
+/* =========================
+   GLITCH ORB
+========================= */
+
+.orb-wrap{
+    position:relative;
+
+    width:min(65vw,300px);
+    aspect-ratio:1;
+
+    margin-top:4px;
+}
+
+.orb{
+    position:absolute;
+
+    left:18%;
+    right:18%;
+    top:18%;
+    bottom:18%;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 40% 32%,
+            #ffffff 0%,
+            #bdfbff 4%,
+            #4bdfff 12%,
+            #087c9e 30%,
+            #071b29 63%,
+            #02050a 100%
+        );
+
+    box-shadow:
+        0 0 22px #27ddff,
+        0 0 60px rgba(30,220,255,.5),
+        inset 0 0 35px #79efff;
+
+    transition:.2s;
+}
+
+.ring{
+    position:absolute;
+    inset:5%;
+
+    border:1px solid rgba(95,235,255,.7);
+    border-radius:50%;
+
+    animation:rotateRing 10s linear infinite;
+}
+
+.ring:after{
+    content:"";
+
+    position:absolute;
+
+    width:8px;
+    height:8px;
+
+    top:-4px;
+    left:50%;
+
+    border-radius:50%;
+
+    background:#7ff5ff;
+
+    box-shadow:0 0 15px #7ff5ff;
+}
+
+.ring2{
+    position:absolute;
+    inset:0;
+
+    border:1px dashed rgba(95,235,255,.22);
+    border-radius:50%;
+
+    animation:rotateRing 16s linear infinite reverse;
+}
+
+@keyframes rotateRing{
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* Listening / speaking animation */
+
+.listening .orb{
+    animation:pulseListening .7s infinite alternate;
+}
+
+.speaking .orb{
+    animation:pulseSpeaking .42s infinite alternate;
+}
+
+@keyframes pulseListening{
+    from{
+        transform:scale(1);
+    }
+
+    to{
+        transform:scale(1.07);
+    }
+}
+
+@keyframes pulseSpeaking{
+    from{
+        transform:scale(1);
+    }
+
+    to{
+        transform:scale(1.11);
+    }
+}
+
+/* =========================
+   TEXT
+========================= */
+
+#caption{
+    width:min(850px,100%);
+
+    min-height:48px;
+
+    margin-top:2px;
+    padding:0 10px;
+
+    text-align:center;
+
+    color:#dffaff;
+
+    font-size:16px;
+    line-height:1.45;
+}
+
+#sub{
+    min-height:18px;
+
+    color:#668391;
+
+    font-size:10px;
+
+    text-align:center;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.controls{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:10px;
+
+    margin:10px 0;
+}
+
+button{
+    border:1px solid #2a6678;
+
+    border-radius:13px;
+
+    padding:11px 16px;
+
+    background:rgba(7,27,39,.9);
+
+    color:#e5fbff;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+button:hover{
+    border-color:#62edff;
+
+    box-shadow:
+        0 0 15px rgba(55,220,255,.25);
+}
+
+button:active{
+    transform:scale(.96);
+}
+
+#mic{
+    width:72px;
+    height:72px;
+
+    border-radius:50%;
+
+    font-size:27px;
+
+    border:2px solid #5ceaff;
+
+    background:#082534;
+
+    box-shadow:
+        0 0 25px rgba(55,220,255,.35);
+}
+
+/* =========================
+   PANELS
+========================= */
+
+.panels{
+    width:min(900px,100%);
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+
+    overflow:auto;
+
+    padding-bottom:5px;
+}
+
+.panel{
+    padding:12px;
+
+    border:1px solid rgba(90,220,255,.14);
+
+    border-radius:14px;
+
+    background:rgba(5,15,25,.72);
+}
+
+.panel h3{
+    margin-bottom:9px;
+
+    color:#74e8ff;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+}
+
+#log{
+    max-height:110px;
+
+    overflow:auto;
+
+    color:#a9c4ce;
+
+    font-size:11px;
+
+    line-height:1.6;
+}
+
+.command-grid{
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:7px;
+}
+
+.command-grid button{
+    padding:9px 7px;
+
+    font-size:10px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    flex-shrink:0;
+
+    padding:6px;
+
+    text-align:center;
+
+    color:#456470;
+
+    font-size:8px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:650px){
+
+    header{
+        height:64px;
+    }
+
+    .brand h1{
+        font-size:18px;
+    }
+
+    .brand small{
+        font-size:8px;
+    }
+
+    .orb-wrap{
+        width:min(62vw,250px);
+    }
+
+    .panels{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div class="brand">
+
+        <div class="logo">
+            G
+        </div>
+
+        <div>
+            <h1>GLITCH</h1>
+
+            <small>
+                PERSONAL AI ASSISTANT • V1–V4
+            </small>
+        </div>
+
+    </div>
+
+    <div id="status">
+        READY
+    </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+    <!-- GLITCH CORE -->
+
+    <div
+        class="orb-wrap"
+        id="orbWrap"
+    >
+
+        <div class="ring"></div>
+
+        <div class="ring2"></div>
+
+        <div class="orb"></div>
+
+    </div>
+
+
+    <!-- GLITCH MESSAGE -->
+
+    <div id="caption">
+
+        नमस्ते! मैं GLITCH हूँ।
+        Mic दबाकर हिंदी में मुझसे बात करें।
+
+    </div>
+
+
+    <div id="sub">
+
+        Voice Output: Hindi Speech Synthesis
+
+    </div>
+
+
+    <!-- CONTROLS -->
+
+    <div class="controls">
+
+        <button
+            id="mic"
+            onclick="toggleListening()"
+        >
+            🎙️
+        </button>
+
+        <button
+            onclick="stopEverything()"
+        >
+            STOP
+        </button>
+
+        <button
+            onclick="openSettings()"
+        >
+            ⚙️
+        </button>
+
+    </div>
+
+
+    <!-- PANELS -->
+
+    <div class="panels">
+
+
+        <!-- QUICK COMMANDS -->
+
+        <section class="panel">
+
+            <h3>
+                QUICK COMMANDS
+            </h3>
+
+            <div class="command-grid">
+
+                <button
+                    onclick="runCommand('YouTube खोलो')"
+                >
+                    ▶ YouTube
+                </button>
+
+                <button
+                    onclick="runCommand('Google खोलो')"
+                >
+                    🔎 Google
+                </button>
+
+                <button
+                    onclick="runCommand('WhatsApp खोलो')"
+                >
+                    💬 WhatsApp
+                </button>
+
+                <button
+                    onclick="runCommand('Chrome खोलो')"
+                >
+                    🌐 Chrome
+                </button>
+
+                <button
+                    onclick="runCommand('मुझे समय बताओ')"
+                >
+                    🕒 Time
+                </button>
+
+                <button
+                    onclick="runCommand('तुम कौन हो')"
+                >
+                    🤖 About
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACTIVITY -->
+
+        <section class="panel">
+
+            <h3>
+                GLITCH ACTIVITY
+            </h3>
+
+            <div id="log">
+
+                GLITCH system initialized.<br>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<footer>
+
+    GLITCH Web Edition • V1–V4
+
+</footer>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   GLITCH V1–V4
+=========================================================
+
+V1
+- Hindi voice input
+- Hindi voice output
+- Voice conversation
+
+V2
+- Web actions
+- Website opening
+- Search commands
+
+V3
+- Settings
+- Local storage
+- Command engine
+- Activity log
+
+V4
+- Futuristic interface
+- GLITCH core animation
+- Extendable architecture
+
+IMPORTANT:
+
+Normal GitHub Pages HTML cannot control every Android app
+or every phone setting.
+
+For full Android control we will later use:
+
+Android APK
++
+Android Intent
++
+Accessibility Service
++
+Runtime Permissions
++
+Native Android APIs
+
+========================================================= */
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+const $ = id =>
+    document.getElementById(id);
+
+let recognition = null;
+
+let listening = false;
+
+let speaking = false;
+
+let voices = [];
+
+const synth =
+    window.speechSynthesis;
+
+
+/* =========================================================
+   LOAD VOICES
+========================================================= */
+
+function loadVoices(){
+
+    voices =
+        synth.getVoices();
+
+}
+
+loadVoices();
+
+
+if(synth.onvoiceschanged){
+
+    synth.onvoiceschanged =
+        loadVoices;
+
+}
+
+
+/* =========================================================
+   FIND HINDI VOICE
+========================================================= */
+
+function getHindiVoice(){
+
+    let voice =
+        voices.find(
+            v => /^hi-IN$/i.test(v.lang)
+        );
+
+    if(voice)
+        return voice;
+
+
+    voice =
+        voices.find(
+            v => /^hi/i.test(v.lang)
+        );
+
+    if(voice)
+        return voice;
+
+
+    return voices.find(
+        v => /india/i.test(v.name)
+    );
+}
+
+
+/* =========================================================
+   LOG
+========================================================= */
+
+function addLog(text){
+
+    const log =
+        $("log");
+
+    log.innerHTML +=
+        "• " +
+        escapeHTML(text) +
+        "<br>";
+
+    log.scrollTop =
+        log.scrollHeight;
+}
+
+
+function escapeHTML(text){
+
+    return String(text)
+        .replace(
+            /[&<>"']/g,
+
+            function(char){
+
+                const map = {
+
+                    "&":"&amp;",
+                    "<":"&lt;",
+                    ">":"&gt;",
+                    '"':"&quot;",
+                    "'":"&#039;"
+
+                };
+
+                return map[char];
+
+            }
+        );
+}
+
+
+/* =========================================================
+   SPEAK
+========================================================= */
+
+function speak(text){
+
+    /*
+       Voice can be disabled from settings.
+    */
+
+    if(
+        localStorage.getItem(
+            "glitchVoice"
+        ) === "off"
+    ){
+
+        $("caption").textContent =
+            text;
+
+        return;
+
+    }
+
+
+    try{
+
+        synth.cancel();
+
+    }catch(e){}
+
+
+    $("caption").textContent =
+        text;
+
+
+    speaking = true;
+
+
+    $("orbWrap")
+        .classList
+        .add("speaking");
+
+
+    $("status").textContent =
+        "SPEAKING";
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    const voice =
+        getHindiVoice();
+
+
+    if(voice){
+
+        utterance.voice =
+            voice;
+
+    }
+
+
+    utterance.lang =
+        "hi-IN";
+
+
+    /*
+       Slightly confident female-like
+       setting when supported by the
+       selected browser voice.
+    */
+
+    utterance.rate =
+        0.94;
+
+
+    utterance.pitch =
+        1.06;
+
+
+    utterance.volume =
+        1;
+
+
+    utterance.onend =
+        function(){
+
+            speaking = false;
+
+            $("orbWrap")
+                .classList
+                .remove("speaking");
+
+            $("status").textContent =
+                "READY";
+
+        };
+
+
+    utterance.onerror =
+        function(){
+
+            speaking = false;
+
+            $("orbWrap")
+                .classList
+                .remove("speaking");
+
+            $("status").textContent =
+                "READY";
+
+        };
+
+
+    synth.speak(
+        utterance
+    );
+
+}
+
+
+/* =========================================================
+   STOP SPEECH
+========================================================= */
+
+function stopSpeech(){
+
+    try{
+
+        synth.cancel();
+
+    }catch(e){}
+
+
+    speaking = false;
+
+    $("orbWrap")
+        .classList
+        .remove("speaking");
+
+}
+
+
+/* =========================================================
+   SPEECH RECOGNITION SETUP
+========================================================= */
+
+function setupRecognition(){
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if(!SpeechRecognition){
+
+        addLog(
+            "Speech Recognition इस browser में उपलब्ध नहीं है। Chrome try करें।"
+        );
+
+        speak(
+            "इस browser में voice recognition उपलब्ध नहीं है। Chrome browser try करें।"
+        );
+
+        return false;
+
+    }
+
+
+    recognition =
+        new SpeechRecognition();
+
+
+    /*
+       Hindi recognition
+    */
+
+    recognition.lang =
+        "hi-IN";
+
+
+    recognition.continuous =
+        false;
+
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.onstart =
+        function(){
+
+            listening = true;
+
+            $("status").textContent =
+                "LISTENING";
+
+
+            $("orbWrap")
+                .classList
+                .add("listening");
+
+
+            $("caption").textContent =
+                "मैं सुन रही हूँ…";
+
+        };
+
+
+    recognition.onend =
+        function(){
+
+            listening = false;
+
+            $("status").textContent =
+                "READY";
+
+
+            $("orbWrap")
+                .classList
+                .remove("listening");
+
+        };
+
+
+    recognition.onerror =
+        function(event){
+
+            listening = false;
+
+            $("status").textContent =
+                "READY";
+
+
+            $("orbWrap")
+                .classList
+                .remove("listening");
+
+
+            addLog(
+                "Voice error: " +
+                event.error
+            );
+
+        };
+
+
+    recognition.onresult =
+        function(event){
+
+            const text =
+                event
+                .results[0][0]
+                .transcript
+                .trim();
+
+
+            addLog(
+                "आप: " +
+                text
+            );
+
+
+            runCommand(
+                text
+            );
+
+        };
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   START / STOP LISTENING
+========================================================= */
+
+function toggleListening(){
+
+    if(listening){
+
+        try{
+
+            recognition.stop();
+
+        }catch(e){}
+
+        return;
+
+    }
+
+
+    if(!recognition){
+
+        const ok =
+            setupRecognition();
+
+
+        if(!ok)
+            return;
+
+    }
+
+
+    stopSpeech();
+
+
+    try{
+
+        recognition.start();
+
+    }catch(e){
+
+        addLog(
+            "Microphone start error."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   NORMALIZE COMMAND
+========================================================= */
+
+function normalize(text){
+
+    return text
+        .toLowerCase()
+        .replace(
+            /[?!.,]/g,
+            " "
+        )
+        .replace(
+            /\s+/g,
+            " "
+        )
+        .trim();
+
+}
+
+
+/* =========================================================
+   COMMAND ENGINE
+========================================================= */
+
+function runCommand(raw){
+
+    const text =
+        normalize(raw);
+
+
+    $("caption").textContent =
+        "आप: " +
+        raw;
+
+
+    addLog(
+        "Command: " +
+        raw
+    );
+
+
+    /* =========================
+       GREETING
+    ========================= */
+
+    if(
+        /^(hi|hello|hey|नमस्ते|नमस्कार|हेलो)/
+        .test(text)
+    ){
+
+        speak(
+            "नमस्ते! मैं GLITCH हूँ। बताइए, मैं आपके लिए क्या करूँ?"
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       NAME
+    ========================= */
+
+    if(
+        text.includes("तुम कौन") ||
+        text.includes("तुम्हारा नाम") ||
+        text.includes("नाम क्या है")
+    ){
+
+        speak(
+            "मेरा नाम GLITCH है। मैं आपका personal AI assistant हूँ।"
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       TIME
+    ========================= */
+
+    if(
+        text.includes("समय") ||
+        text.includes("time")
+    ){
+
+        const now =
+            new Date();
+
+
+        const time =
+            now.toLocaleTimeString(
+                "hi-IN",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            );
+
+
+        speak(
+            "अभी समय है " +
+            time +
+            "।"
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       DATE
+    ========================= */
+
+    if(
+        text.includes("तारीख") ||
+        text.includes("date") ||
+        text.includes("आज कौन सी तारीख")
+    ){
+
+        const date =
+            new Date()
+            .toLocaleDateString(
+                "hi-IN",
+                {
+                    day:"numeric",
+                    month:"long",
+                    year:"numeric"
+                }
+            );
+
+
+        speak(
+            "आज की तारीख है " +
+            date +
+            "।"
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       YOUTUBE
+    ========================= */
+
+    if(
+        text.includes("youtube") ||
+        text.includes("यूट्यूब")
+    ){
+
+        speak(
+            "YouTube खोल रही हूँ।"
+        );
+
+
+        setTimeout(
+            function(){
+
+                window.location.href =
+                    "https://www.youtube.com/";
+
+            },
+            700
+        );
+
+
+        return;
+
+    }
+
+
+    /* =========================
+       GOOGLE
+    ========================= */
+
+    if(
+        text.includes("google") ||
+        text.includes("गूगल")
+    ){
+
+        const query =
+            extractSearchQuery(
+                raw
+            );
+
+
+        if(query){
+
+            speak(
+                "Google पर search कर रही हूँ।"
+            );
+
+
+            setTimeout(
+                function(){
+
+                    window.location.href =
+                        "https://www.google.com/search?q=" +
+                        encodeURIComponent(
+                            query
+                        );
+
+                },
+                700
+            );
+
+        }else{
+
+            speak(
+                "Google खोल रही हूँ।"
+            );
+
+
+            setTimeout(
+                function(){
+
+                    window.location.href =
+                        "https://www.google.com/";
+
+                },
+                700
+            );
+
+        }
+
+
+        return;
+
+    }
+
+
+    /* =========================
+       WHATSAPP
+    ========================= */
+
+    if(
+        text.includes("whatsapp") ||
+        text.includes("व्हाट्सएप")
+    ){
+
+        speak(
+            "WhatsApp खोलने की कोशिश कर रही हूँ।"
+        );
+
+
+        setTimeout(
+            function(){
+
+                window.location.href =
+                    "https://wa.me/";
+
+            },
+            700
+        );
+
+
+        return;
+
+    }
+
+
+    /* =========================
+       CHROME
+    ========================= */
+
+    if(
+        text.includes("chrome") ||
+        text.includes("क्रोम")
+    ){
+
+        speak(
+            "Web version से मैं Chrome app को force-open नहीं कर सकती। Native Android GLITCH version में इसे Android Intent से जोड़ा जा सकता है।"
+        );
+
+
+        return;
+
+    }
+
+
+    /* =========================
+       VOLUME
+    ========================= */
+
+    if(
+        (
+            text.includes("आवाज") ||
+            text.includes("volume")
+        ) &&
+        (
+            text.includes("बढ़") ||
+            text.includes("up") ||
+            text.includes("ज्यादा")
+        )
+    ){
+
+        speak(
+            "Browser version से phone का system volume सीधे बदलना संभव नहीं है। Native GLITCH APK में volume control जोड़ा जा सकता है।"
+        );
+
+
+        return;
+
+    }
+
+
+    if(
+        (
+            text.includes("आवाज") ||
+            text.includes("volume")
+        ) &&
+        (
+            text.includes("कम") ||
+            text.includes("down")
+        )
+    ){
+
+        speak(
+            "Browser version से system volume control नहीं किया जा सकता। Native Android version में यह feature जोड़ा जाएगा।"
+        );
+
+
+        return;
+
+    }
+
+
+    /* =========================
+       SETTINGS
+    ========================= */
+
+    if(
+        text.includes("settings") ||
+        text.includes("setting") ||
+        text.includes("सेटिंग")
+    ){
+
+        openSettings();
+
+        return;
+
+    }
+
+
+    /* =========================
+       STOP
+    ========================= */
+
+    if(
+        text === "stop" ||
+        text.includes("चुप हो जाओ") ||
+        text.includes("बंद हो जाओ")
+    ){
+
+        stopEverything();
+
+        return;
+
+    }
+
+
+    /* =========================
+       THANK YOU
+    ========================= */
+
+    if(
+        text.includes("धन्यवाद") ||
+        text.includes("thank you") ||
+        text.includes("thanks")
+    ){
+
+        speak(
+            "आपका स्वागत है।"
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       UNKNOWN COMMAND
+    ========================= */
+
+    speak(
+        "मैंने आपकी command सुनी। इस Web Edition में इस command के लिए अभी native phone permission उपलब्ध नहीं है।"
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH QUERY
+========================================================= */
+
+function extractSearchQuery(raw){
+
+    let query =
+        raw;
+
+
+    query =
+        query.replace(
+            /google|गूगल|search|सर्च|पर|में|करो|करना|खोजो|खोज/gi,
+            " "
+        );
+
+
+    return query
+        .replace(/\s+/g," ")
+        .trim();
+
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function openSettings(){
+
+    const current =
+        localStorage.getItem(
+            "glitchVoice"
+        ) !== "off";
+
+
+    const answer =
+        prompt(
+            "GLITCH SETTINGS\n\n" +
+            "1 = Voice ON\n" +
+            "2 = Voice OFF\n" +
+            "3 = Clear Activity\n\n" +
+            "Current Voice: " +
+            (current ? "ON" : "OFF")
+        );
+
+
+    if(answer === "1"){
+
+        localStorage.setItem(
+            "glitchVoice",
+            "on"
+        );
+
+
+        speak(
+            "Voice output चालू कर दिया गया है।"
+        );
+
+    }
+
+
+    else if(answer === "2"){
+
+        localStorage.setItem(
+            "glitchVoice",
+            "off"
+        );
+
+
+        $("caption").textContent =
+            "Voice output बंद है।";
+
+
+        $("status").textContent =
+            "READY";
+
+    }
+
+
+    else if(answer === "3"){
+
+        $("log").innerHTML =
+            "GLITCH system initialized.<br>";
+
+
+        speak(
+            "Activity log साफ कर दिया गया है।"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   STOP EVERYTHING
+========================================================= */
+
+function stopEverything(){
+
+    stopSpeech();
+
+
+    if(
+        recognition &&
+        listening
+    ){
+
+        try{
+
+            recognition.stop();
+
+        }catch(e){}
+
+    }
+
+
+    listening = false;
+
+
+    $("status").textContent =
+        "READY";
+
+
+    $("orbWrap")
+        .classList
+        .remove("listening");
+
+
+    $("orbWrap")
+        .classList
+        .remove("speaking");
+
+
+    $("caption").textContent =
+        "GLITCH ready है।";
+
+}
+
+
+/* =========================================================
+   STARTUP LOG
+========================================================= */
+
+addLog(
+    "GLITCH V1 voice engine ready."
+);
+
+addLog(
+    "GLITCH V2 web actions ready."
+);
+
+addLog(
+    "GLITCH V3 command engine ready."
+);
+
+addLog(
+    "GLITCH V4 futuristic interface ready."
+);
+
+
+/* =========================================================
+   BROWSER SUPPORT CHECK
+========================================================= */
+
+if(
+    !("speechSynthesis" in window)
+){
+
+    addLog(
+        "Speech Synthesis उपलब्ध नहीं है।"
+    );
+
+}
+
+
+if(
+    !(
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition
+    )
+){
+
+    addLog(
+        "Speech Recognition इस browser में उपलब्ध नहीं है।"
+    );
+
+}
+
+</script>
+
+</body>
+</html>
+```
